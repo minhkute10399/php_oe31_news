@@ -48,8 +48,7 @@ class PostController extends Controller
     public function show($id)
     {
         $post = $this->postRepo->find($id, ['comments.user']);
-
-        if ($post->status == config('number_status_post.status_request')) {
+        if (!$post || $post->status == config('number_status_post.status_request')) {
             abort(Response::HTTP_NOT_FOUND);
         }
         $category = $this->categoryRepo->loadParent();
