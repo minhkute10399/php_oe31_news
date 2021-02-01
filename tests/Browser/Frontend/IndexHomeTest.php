@@ -14,39 +14,38 @@ class IndexHomeTest extends DuskTestCase
      *
      * @return void
      */
-    public function test_login_home_index()
+
+    public function test_login_page_home_index()
     {
         $this->browse(function (Browser $browser) {
-            $user = factory(User::class)->make([
-                'email' => 'test@gmail.com',
-            ]);
             $browser->visit('/home')
                 ->clickLink('Login')
                 ->assertSee('Login')
-                ->type('email', $user->email)
-                ->type('password', 'password')
-                ->click('.login')
-                ->visit('/home')
-                ->assertPathIs('/home');
+                ->assertPathIs('/login');
         });
     }
 
-    public function test_register_home_index()
+    public function test_login_false_home_index()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/home')
-                ->clickLink('Register')
-                ->assertSee('Register')
-                ->value('#name', 'Test')
-                ->value('#email', 'test@gmail.com')
-                ->value('#password', '12345678')
-                ->value('#password-confirm', '12345678')
-                ->click('.register')
-                ->visit('/home')
-                ->assertPathIs('/home');
+            $browser->visit('/login')
+                ->type('email', 'fail@gmail.com')
+                ->type('password', '12345678')
+                ->press('.login')
+                ->assertPathIs('/login');
         });
     }
 
+    public function test_login_true_home_index()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/login')
+                ->type('email', 'admin@gmail.com')
+                ->type('password', '12345678')
+                ->press('.login')
+                ->assertPathIs('/home');
+        });
+    }
     public function test_logout_home_index()
     {
         $this->browse(function (Browser $browser) {
@@ -99,6 +98,22 @@ class IndexHomeTest extends DuskTestCase
                 ->assertSee('Lượt xem')
                 ->assertSee('Bình luận')
                 ->assertSee('Tất cả Bài viết');
+        });
+    }
+
+    public function test_become_author_home_page()
+    {
+        $this->browse(function (Browser $browser) {
+            $user = User::find(5);
+            $browser->loginAs($user)
+                ->visit('/home')
+                ->click('.dropdown-toggle')
+                ->click('@become_author')
+                ->whenAvailable('.modal', function ($modal) {
+                    $modal->assertSee('Modal title')
+                        ->press('.close');
+                });
+
         });
     }
 }
