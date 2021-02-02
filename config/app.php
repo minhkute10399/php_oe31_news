@@ -163,6 +163,8 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        App\Providers\RepositoriesServiceProvider::class,
+
         /*
          * Package Service Providers...
          */

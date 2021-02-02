@@ -8,12 +8,17 @@ use App\Models\Comment;
 use Illuminate\Auth\Access\Gate;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Http\Response;
+use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Category\CategoryRepository;
 
 class CategoryController extends Controller
 {
-    public function __construct()
+    protected $categoryRepo;
+
+    public function __construct(CategoryRepositoryInterface $categoryRepo)
     {
         $this->middleware('auth');
+        $this->categoryRepo = $categoryRepo;
     }
     /**
      * Display a listing of the resource.
@@ -22,7 +27,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $items = Category::where('parent_id', config('number_format.parent_id'))->paginate(config('number_status_post.paginate_home'));
+        $items = $this->categoryRepo->getCategoryIndex();
 
         return view('website.backend.category.index', compact('items'));
     }
@@ -34,7 +39,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('parent_id', config('number_format.parent_id'))->get();
+        $categories = $this->categoryRepo->getCategoryCreate();
 
         return view('website.backend.category.create', compact('categories'));
     }
@@ -47,8 +52,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = new Category;
-        $category->create($request->only(['name', 'parent_id']));
+        $this->categoryRepo->create($request->only(['name', 'parent_id']));
         Alert::success(trans('message.success'), trans('messsage.successfully'));
 
         return redirect()->route('categories.index');
@@ -62,15 +66,13 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = Category::findOrFail($id);
+        $category = $this->categoryRepo->find($id, ['children']);
 
-        if ($category->parent_id === config('number_format.parent_id')) {
-            $category->load('children');
-
-            return view('website.backend.category.show', compact('category'));
+        if ($category->parent_id != config('number_format.parent_id')) {
+            abort(Response::HTTP_NOT_FOUND);
         }
 
-        abort(Response::HTTP_NOT_FOUND);
+        return view('website.backend.category.show', compact('category'));
     }
 
     /**
@@ -81,14 +83,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::findOrFail($id);
-        $categoryList = Category::all();
-
-        if ($category->parent_id === config('number_format.parent_id')) {
-            $category->load('children');
-
-            return view('website.backend.category.update', compact('category', 'categoryList'));
-        }
+        $category = $this->categoryRepo->find($id, ['children']);
+        $categoryList = $this->categoryRepo->getAll();
 
         return view('website.backend.category.update', compact('category', 'categoryList'));
     }
@@ -102,8 +98,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = Category::findOrFail($id);
-        $category->update([
+        $category = $this->categoryRepo->find($id);
+        $this->categoryRepo->update($id, [
             'name' => $request->name,
             'parent_id' => $request->parent_id,
         ]);
@@ -120,15 +116,14 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
-        $category->load('children');
+        $category = $this->categoryRepo->find($id, ['children']);
 
         if ($category->children->count()) {
             foreach ($category->children as $child) {
                 $child->delete();
             }
         }
-        $category->delete();
+        $this->categoryRepo->delete($id);
         Alert::success(trans('message.success'), trans('messsage.delete_successfully'));
 
         return redirect()->back();
