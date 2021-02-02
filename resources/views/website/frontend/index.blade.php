@@ -176,7 +176,7 @@
                                                         <a href="{{ route('postAuthor', [Auth::user()->id]) }}" class="btn btn-primary">{{ trans('message.my_post') }}</a>
                                                     @endcan
                                                     @cannot('become_author')
-                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#author">
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#author" dusk="become_author">
                                                             {{ trans('message.become_author') }}
                                                         </button>
                                                     @endcannot
@@ -742,7 +742,7 @@
                     </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ trans('message.close') }}</button>
+              <button type="button" class="btn btn-secondary close" data-dismiss="modal">{{ trans('message.close') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('message.save') }}</button>
             </div>
         </form>
