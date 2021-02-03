@@ -13,10 +13,12 @@ use App\Repositories\Post\PostRepositoryInterface;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Post\PostRepository;
 use Facade\FlareClient\Http\Response;
+use Facebook\WebDriver\Exception\ExpectedException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use PhpParser\Node\Expr\FuncCall;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PostControllerTest extends TestCase
 {
@@ -49,6 +51,18 @@ class PostControllerTest extends TestCase
         $postApproved = $this->postControllerTest->index();
         $this->assertEquals('website.backend.post.index', $postApproved->getName());
         $this->assertArrayHasKey('posts', $postApproved->getData());
+    }
+
+    public function test_find_id_show_post()
+    {
+        $id = 1000;
+        $this->postRepo
+            ->shouldReceive('find')
+            ->with($id, ['comments.user'])
+            ->once()
+            ->andReturn(null);
+        $this->expectException(HttpException::class);
+        $this->postControllerTest->show($id);
     }
 
     public function test_show_false_status_post_admin()
