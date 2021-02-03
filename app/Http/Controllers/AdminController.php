@@ -4,17 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Repositories\Admin;
+use App\Repositories\Admin\AdminRepository;
+use App\Repositories\Admin\AdminRepositoryInterface;
+use App\Repositories\Post\PostRepository;
+use App\Repositories\Post\PostRepositoryInterface;
 
 class AdminController extends Controller
 {
+    protected $postRepo;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
+    public function __construct(PostRepositoryInterface $postRepo)
     {
         $this->middleware('auth');
+        $this->postRepo = $postRepo;
     }
 
     public function index()
@@ -24,80 +31,15 @@ class AdminController extends Controller
 
     public function showRequestPost()
     {
-        $posts = Post::where('status', config('number_status_post.status_request'))->latest()->paginate(config('number_status_post.paginate_home'));
+        $posts = $this->postRepo->showRequestPost();
 
         return view('website.backend.post.pending_request', compact('posts'));
     }
 
     public function previewPost($id)
     {
-        $post = Post::findOrFail($id);
+        $post = $this->postRepo->find($id);
 
         return view('website.frontend.preview_post', compact('post'));
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

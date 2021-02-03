@@ -20,4 +20,13 @@ interface PostRepositoryInterface
      * @return $post
      */
     public function search($search);
+
+    /**
+     * Search function is defined for searching title of the accepted post.
+     *
+     * @param  $search
+     *
+     * @return $post
+     */
+    public function showRequestPost();
 }

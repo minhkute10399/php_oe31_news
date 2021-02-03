@@ -28,4 +28,12 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
             ->with('category')
             ->paginate(config('number_status_post.paginate_home'));
     }
+
+    public function showRequestPost()
+    {
+        return $this->model
+            ->where('status', config('number_status_post.status_request'))
+            ->latest()
+            ->paginate(config('number_status_post.paginate_home'));
+    }
 }
