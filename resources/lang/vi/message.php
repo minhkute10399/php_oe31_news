@@ -87,4 +87,5 @@ return [
     'latest_post' => 'Bài viết mới nhất',
     'approved' => 'Chấp nhận',
     'pending' => 'Chờ',
+    'spamrequest' => 'Yêu cầu của bạn đang được xét duyệt!! Bạn không thể gửi thêm yêu cầu',
 ];

@@ -25,6 +25,10 @@ class RepositoriesServiceProvider extends ServiceProvider
             \App\Repositories\User\UserRepositoryInterface::class,
             \App\Repositories\User\UserRepository::class,
         );
+        $this->app->singleton(
+            \App\Repositories\RequestWriter\RequestWriterRepositoryInterface::class,
+            \App\Repositories\RequestWriter\RequestWriterRepository::class,
+        );
     }
 
     /**
