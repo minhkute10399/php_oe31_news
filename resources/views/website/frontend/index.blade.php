@@ -1,22 +1,6 @@
 @extends('website.frontend.header')
 
 @section('content')
-    <!-- Preloader Start -->
-    <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="text-center">
-                    <img class="jump mb-50" src="assets/imgs/loading.svg" alt="">
-                    <h6>{{ trans('message.now_loading') }}</h6>
-                    <div class="loader">
-                        <div class="bar bar1"></div>
-                        <div class="bar bar2"></div>
-                        <div class="bar bar3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="main-wrap">
         <!--Offcanvas sidebar-->
         <aside id="sidebar-wrapper" class="custom-scrollbar offcanvas-sidebar position-right">
@@ -751,6 +735,7 @@
       </div>
     <div class="dark-mark"></div>
     <!-- Vendor JS-->
+    @include('sweetalert::alert')
     <script src="{{ asset('assets/js/vendor/modernizr-3.5.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/jquery-1.12.4.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/popper.min.js') }}"></script>

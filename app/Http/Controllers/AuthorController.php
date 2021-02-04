@@ -106,13 +106,16 @@ class AuthorController extends Controller
         if (!Gate::denies('become_author')) {
             abort(Response::HTTP_FORBIDDEN);
         }
-        $authorRequest = RequestWriter::create([
-            'note' => $request->note,
-            'status' => config('number_status_post.status_request'),
-            'user_id' => Auth::id(),
-            'role_id' => config('number_status_post.user'),
-        ]);
-        Alert::success(trans('message.success'), trans('message.successfully'));
+
+        if (is_null(Auth::user()->load('requestwriter')->requestwriter)) {
+            RequestWriter::create([
+                'note' => $request->note,
+                'user_id' => Auth::id(),
+            ]);
+            toast(trans('message.successfully'),'success')->timerProgressBar();
+        } else {
+            toast(trans('message.spamrequest'),'warning')->timerProgressBar();
+        }
 
         return redirect()->back();
     }
@@ -159,7 +162,7 @@ class AuthorController extends Controller
 
             return redirect()->route('home.index');
         } else {
-            Alert::danger(trans('message.success'), trans('messsage.add_successfully'));
+            Alert::error(trans('message.success'), trans('messsage.add_successfully'));
         }
 
         return redirect()->route('authors.edit', $id);

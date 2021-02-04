@@ -43,17 +43,6 @@
                                                         aria-label="First name: activate to sort column descending">
                                                         {{ trans('message.user') }}
                                                     </th>
-                                                    <th class="sorting_asc" tabindex="0"
-                                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
-                                                        aria-sort="ascending"
-                                                        aria-label="First name: activate to sort column descending">
-                                                        {{ trans('message.role') }}
-                                                    </th>
-                                                    <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Last name: activate to sort column ascending">
-                                                        {{ trans('message.status') }}
-                                                    </th>
                                                     <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Last name: activate to sort column ascending">
@@ -74,8 +63,6 @@
                                                     <tr role="row" class="odd">
                                                         <td>{{ $index++ }}</td>
                                                         <td>{{ $item->author->name }}</td>
-                                                        <td>{{ $item->role->name }}</td>
-                                                        <td>{{ $item->status }}</td>
                                                         <td>{{  date('M d ,Y', strtotime($item->created_at))}} {{ trans('message.at')}} {{ date('g:ia', strtotime($item->created_at)) }}</td>
                                                         <td class="d-flex">
                                                             <button type="button" class="btn btn-primary"
@@ -151,9 +138,9 @@
     @endforeach
 
     @foreach ($requestWriter as $post)
-        <form action="{{ route('authors.update', [$post->id]) }}" method="POST">
+        <form action="{{ route('requests.destroy', [$post->id]) }}" method="POST">
             @csrf
-            @method('PUT')
+            @method('DELETE')
             <input type="hidden" name="status" value="{{ config('number_status_post.status_block') }}">
             <div class="modal fade" id="reject{{ $post->id }}" tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
