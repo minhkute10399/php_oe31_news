@@ -4,20 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Repositories\User\UserRepository;
+use App\Repositories\User\UserRepositoryInterface;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
+    protected $userRepo;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct(UserRepositoryInterface $userRepo)
+    {
+        $this->middleware('auth');
+        $this->userRepo = $userRepo;
+    }
+
     public function index()
     {
-        $users = User::paginate(config('paginate.page'));
+        $users = $this->userRepo->listUser();
 
-        return view('website.backend.users.list')->with('users', $users);
+        return view('website.backend.users.list',compact('users'));
     }
 
     /**
@@ -28,9 +37,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $users = User::findOrFail($id);
+        $users = $this->userRepo->find($id);
 
-        return view('website.backend.users.edit')->with('users', $users);
+        return view('website.backend.users.edit', compact('users'));
     }
 
     /**
@@ -42,7 +51,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $users = User::findOrFail($id);
+        $users = $this->userRepo->find($id);
         Alert::success('Success', trans('message.ok'));
         $filename = config('image_user.image_user');
         if ($request->hasFile('image')) {
@@ -52,7 +61,7 @@ class UserController extends Controller
             $file->move(public_path(config('image.image')), $filename);
             $users->image = $filename;
         }
-        $users->update([
+        $this->userRepo->update($id, [
             'name' => $request->name,
             'email' => $request->email,
             'banned_until' => $request->banned_until,
