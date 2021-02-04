@@ -11,4 +11,22 @@ interface UserRepositoryInterface
      * @return $user
      */
     public function listUser();
+
+    /**
+     * Load all post of that author.
+     *
+     * @param  null
+     *
+     * @return $post
+     */
+    public function loadAuthor();
+
+    /**
+     * Load all post of that author.
+     *
+     * @param  null
+     *
+     * @return $post
+     */
+    public function loadMyPost($id);
 }

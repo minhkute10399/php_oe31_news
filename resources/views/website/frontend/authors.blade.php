@@ -18,22 +18,6 @@
 </head>
 
 <body>
-    <!-- Preloader Start -->
-    <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="text-center">
-                    <img class="jump mb-50" src="assets/imgs/loading.svg" alt="">
-                    <h6>Now Loading</h6>
-                    <div class="loader">
-                        <div class="bar bar1"></div>
-                        <div class="bar bar2"></div>
-                        <div class="bar bar3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="main-wrap">
         <!--Offcanvas sidebar-->
         <aside id="sidebar-wrapper" class="custom-scrollbar offcanvas-sidebar position-right">
@@ -240,37 +224,39 @@
                                                     <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                                         @csrf
                                                         <button class="btn btn-light"
-                                                            type="submit">{{ trans('message.logout') }}</button>
+                                                            type="submit" dusk="logout">{{ trans('message.logout') }}</button>
                                                     </form>
                                                     @can('my_post')
-                                                        <a href="{{ route('postAuthor', [Auth::user()->id]) }}">{{ trans('message.my_post') }}</a>
+                                                        <a href="{{ route('postAuthor', [Auth::user()->id]) }}" class="btn btn-primary">{{ trans('message.my_post') }}</a>
                                                     @endcan
                                                     @cannot('become_author')
-                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#author">
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#author" dusk="become_author">
                                                             {{ trans('message.become_author') }}
                                                         </button>
                                                     @endcannot
                                                 </div>
                                             </li>
                                         @endguest
-                                            <li class="mega-menu-item">
-                                                <a href="{{ route('change-languages', ['language' => 'en']) }}">{{ trans('message.en') }}</a>
-                                            </li>
-                                            <li class="mega-menu-item">
-                                                <a href="{{ route('change-languages', ['language' => 'vi']) }}">{{ trans('message.vi') }}</a>
-                                            </li>
-                                        </ul>
-
+                                        <li class="nav-item dropdown">
+                                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                                data-toggle="dropdown" aria-haspopup="true" dusk="language" aria-expanded="false" v-pre>
+                                                {{ trans('message.language') }}
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                                <a href="{{ route('change-languages', ['language' => 'en']) }}" dusk="english">{{ trans('message.en') }}</a>
+                                                <a href="{{ route('change-languages', ['language' => 'vi']) }}" dusk="vietnam">{{ trans('message.vi') }}</a>
+                                            </div>
+                                        </li>
                                     {{-- Notification --}}
                                 </nav>
                             </div>
 
                            <!-- Search -->
                            <form action="{{ route('search') }}" method="GET"
-                           class="search-form d-lg-inline float-right position-relative mr-30 d-none">
-                           <input type="text" class="search_field" placeholder="{{ trans('message.search') }}" value="" name="search">
-                           <button type="submit" class="search-icon"><i class="ti-search mr-5"></i></button>
-                       </form>
+                            class="search-form d-lg-inline float-right position-relative mr-30 d-none">
+                                <input type="text" class="search_field" placeholder="{{ trans('message.search') }}" value="" name="search">
+                                <button type="submit" class="search-icon"><i class="ti-search mr-5"></i></button>
+                            </form>
                        <!-- Off canvas -->
                        <div class="off-canvas-toggle-cover">
                            <div class="off-canvas-toggle hidden d-inline-block ml-15" id="off-canvas-toggle">
@@ -297,88 +283,6 @@
                                     class="dataTables_wrapper container-fluid dt-bootstrap no-footer">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <table id="datatable-responsive"
-                                                class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline"
-                                                cellspacing="0" width="100%" role="grid"
-                                                aria-describedby="datatable-responsive_info">
-                                                <thead>
-                                                    <tr role="row">
-                                                        <th class="sorting_asc" tabindex="0"
-                                                            aria-controls="datatable-responsive" rowspan="1" colspan="1"
-                                                            aria-sort="ascending"
-                                                            aria-label="First name: activate to sort column descending">
-                                                            {{ trans('message.stt') }}
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Last name: activate to sort column ascending">
-                                                            {{ trans('message.title') }}
-                                                        </th>
-                                                        <th class="sorting_asc" tabindex="0"
-                                                            aria-controls="datatable-responsive" rowspan="1" colspan="1"
-                                                            aria-sort="ascending"
-                                                            aria-label="First name: activate to sort column descending">
-                                                            {{ trans('message.image') }}
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Last name: activate to sort column ascending">
-                                                            {{ trans('message.status') }}
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Last name: activate to sort column ascending">
-                                                            {{ trans('message.created_at') }}
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Last name: activate to sort column ascending">
-                                                            {{ trans('message.updated_at') }}
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Last name: activate to sort column ascending">
-                                                            {{ trans('message.action') }}
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @php
-                                                        $index = 1;
-                                                    @endphp
-                                                    @foreach ($users->posts as $post)
-                                                        <tr role="row" class="odd">
-                                                            <td>{{ $index++ }}</td>
-                                                            <td>{{ $post->title }}</td>
-                                                            <td><img class="img-post-author" src = "{{ asset('images/' . $post->image) }}" height="73px" width="73px"></td>
-                                                            <td>
-                                                                @if ($post->status === config('number_status_post.status'))
-                                                                    {{ trans('message.approved') }}
-                                                                    @else
-
-                                                                    {{ trans('message.pendding') }}
-                                                                    @endif
-                                                            </td>
-                                                            <td>{{ $post->created_at }}</td>
-                                                            <td>{{ $post->updated_at }}</td>
-                                                            <td class="d-flex">
-                                                                @if ($post->status === config('number_status_post.pending'))
-                                                                <form action="{{ route('authors.destroy', $post->id) }}" method="POST" class="form-btn">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <a href="{{ route('authors.edit', $post->id) }}" >{{ trans('message.edit') }}</a>
-                                                                    <button type="submit" class="delete-btn">{{ trans('message.delete') }}</button>
-                                                                </form>
-                                                                <button type="button" class="preview-btn" data-toggle="modal" data-target="#post{{ $post->id }}">
-                                                                    Preview
-                                                                </button>
-                                                                @endif
-
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -386,6 +290,53 @@
                         </div>
                     </div>
                 </div>
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">{{ trans('message.stt') }}</th>
+                        <th scope="col">{{ trans('message.title') }}</th>
+                        <th scope="col">{{ trans('message.image') }}</th>
+                        <th scope="col">{{ trans('message.status') }}</th>
+                        <th scope="col">{{ trans('message.created_at') }}</th>
+                        <th scope="col">{{ trans('message.updated_at') }}</th>
+                        <th scope="col">{{ trans('message.action') }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $index = 1;
+                        @endphp
+                        @foreach ($users->posts as $post)
+                            <tr>
+                                <th scope="row">{{ $index++ }}</th>
+                                <td>{{ $post->title }}</td>
+                                <td><img class="img-post-author" src = "{{ asset('images/' . $post->image) }}" height="73px" width="73px"></td>
+                                <td class="status-td">
+                                    @if ($post->status === config('number_status_post.status'))
+                                        {{ trans('message.approved') }}
+                                        @else
+                                        {{ trans('message.pending') }}
+                                    @endif
+                                </td>
+                                <td>{{ $post->created_at }}</td>
+                                <td>{{ $post->updated_at }}</td>
+                                <td class="d-flex">
+                                    @if ($post->status === config('number_status_post.pending'))
+                                        <form action="{{ route('authors.destroy', $post->id) }}" method="POST" class="form-btn">
+                                            @csrf
+                                            @method('DELETE')
+                                            <a href="{{ route('authors.edit', $post->id) }}" class="authorEdit">{{ trans('message.edit') }}</a>
+                                            <button type="submit" class="delete-btn">{{ trans('message.delete') }}</button>
+                                        </form>
+                                        <button type="button" class="preview-btn" data-toggle="modal" data-target="#post{{ $post->id }}">
+                                            Preview
+                                        </button>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                  </table>
             </div>
         </div>
     @foreach ($users->posts as $post)

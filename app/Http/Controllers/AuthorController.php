@@ -7,6 +7,14 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Models\RequestWriter;
 use App\Models\User;
+use App\Repositories\Category\CategoryRepository;
+use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Post\PostRepository;
+use App\Repositories\Post\PostRepositoryInterface;
+use App\Repositories\RequestWriter\RequestWriterRepository;
+use App\Repositories\RequestWriter\RequestWriterRepositoryInterface;
+use App\Repositories\User\UserRepository;
+use App\Repositories\User\UserRepositoryInterface;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +22,22 @@ use Illuminate\Support\Facades\Gate;
 
 class AuthorController extends Controller
 {
-    public function __construct()
-    {
+    protected $categoryRepo;
+    protected $userRepo;
+    protected $postRepo;
+    protected $requestWriterRepo;
+
+    public function __construct(
+        CategoryRepositoryInterface $categoryRepo,
+        UserRepositoryInterface $userRepo,
+        PostRepositoryInterface $postRepo,
+        RequestWriterRepositoryInterface $requestWriterRepo
+    ) {
         $this->middleware('auth');
+        $this->userRepo = $userRepo;
+        $this->categoryRepo = $categoryRepo;
+        $this->postRepo = $postRepo;
+        $this->requestWriterRepo = $requestWriterRepo;
     }
     /**
      * Display a listing of the resource.
@@ -26,9 +47,8 @@ class AuthorController extends Controller
 
     public function manageAuthor()
     {
-        $category = Category::where('parent_id', config('number_format.parent_id'))->get();
-        $category->load('children');
-        $requestWriter = User::where('role_id', config('number_status_post.author'))->get();
+        $category = $this->categoryRepo->loadParent();
+        $requestWriter = $this->userRepo->loadAuthor();
 
         return view('website.backend.author_request.index', compact('category', 'requestWriter'));
     }
@@ -42,19 +62,10 @@ class AuthorController extends Controller
         if(!Gate::allows('create_post')) {
             abort(Response::HTTP_FORBIDDEN);
         }
-        $category = Category::all();
+        $category = $this->categoryRepo->getAll();
         $category->load('children');
 
         return view('website.frontend.create', compact('category'));
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     public function postAuthor($id)
@@ -62,11 +73,8 @@ class AuthorController extends Controller
         if (!Gate::allows('my_post')) {
             abort(Response::HTTP_FORBIDDEN);
         }
-        $users = User::findOrFail($id)->load(['posts' => function ($query) {
-            $query->where('status', config('number_status_post.status_request'));
-        }]);
-        $category = Category::where('parent_id', config('number_format.parent_id'))->get();
-        $category->load('children');
+        $users = $this->userRepo->loadMyPost($id);
+        $category = $this->categoryRepo->loadParent();
 
         return view ('website.frontend.authors', compact('users', 'category'));
     }
@@ -84,7 +92,7 @@ class AuthorController extends Controller
             $extension = $file->getClientOriginalExtension();
             $fileName = time() . '.' . $extension;
             $file->move(public_path(config('image_user.image')), $fileName);
-            Post::create([
+            $this->postRepo->create([
                 'title' => $request->title,
                 'content' => $request->content,
                 'category_id' => $request->category_id,
@@ -108,7 +116,7 @@ class AuthorController extends Controller
         }
 
         if (is_null(Auth::user()->load('requestwriter')->requestwriter)) {
-            RequestWriter::create([
+            $this->requestWriterRepo->create([
                 'note' => $request->note,
                 'user_id' => Auth::id(),
             ]);
@@ -127,8 +135,8 @@ class AuthorController extends Controller
      */
     public function edit($id)
     {
-        $authors = Post::findOrFail($id);
-        $category = Category::all();
+        $authors = $this->postRepo->find($id);
+        $category = $this->categoryRepo->getAll();
         $category->load('children');
 
         return view('website.frontend.edit', compact('authors', 'category'));
@@ -143,13 +151,13 @@ class AuthorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $authors = Post::findOrFail($id);
+        $authors = $this->postRepo->find($id);
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $fileName = time() . '.' . $extension;
             $file->move(public_path(config('image_user.image')), $fileName);
-            $authors->update([
+            $this->postRepo->update($id, [
                 'title' => $request->title,
                 'content' => $request->content,
                 'category_id' => $request->category_id,
@@ -159,13 +167,12 @@ class AuthorController extends Controller
                 'status' => config('number_status_post.view'),
             ]);
             Alert::success(trans('message.success'), trans('messsage.successfully'));
-
             return redirect()->route('home.index');
         } else {
-            Alert::error(trans('message.success'), trans('messsage.add_successfully'));
-        }
+            Alert::error(trans('message.success'), trans('messsage.successfully'));
 
-        return redirect()->route('authors.edit', $id);
+            return redirect()->route('home.index');
+        }
     }
 
     /**
@@ -176,7 +183,7 @@ class AuthorController extends Controller
      */
     public function destroy($id)
     {
-        $author = Post::destroy($id);
+        $this->postRepo->delete($id);
 
         return redirect()->back();
     }

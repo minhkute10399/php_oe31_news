@@ -49,6 +49,7 @@ class RequestAuthorController extends Controller
         $this->userRepo->update($requestWriter->user_id, [
             'role_id' => $request->role_id,
         ]);
+        $this->requestWriterRepo->delete($id);
         toast(trans('message.successfully'),'success')->timerProgressBar();
 
         return redirect()->back();
