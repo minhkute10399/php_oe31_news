@@ -183,16 +183,16 @@
 
                            <!-- Search -->
                            <form action="{{ route('search') }}" method="GET"
-                           class="search-form d-lg-inline float-right position-relative mr-30 d-none">
-                           <input type="text" class="search_field" placeholder="{{ trans('message.search') }}" value="" name="search">
-                           <button type="submit" class="search-icon"><i class="ti-search mr-5"></i></button>
-                       </form>
+                            class="search-form d-lg-inline float-right position-relative mr-30 d-none">
+                                <input type="text" class="search_field" placeholder="{{ trans('message.search') }}" value="" name="search">
+                                <button type="submit" class="search-icon"><i class="ti-search mr-5"></i></button>
+                            </form>
                        <!-- Off canvas -->
-                       <div class="off-canvas-toggle-cover">
-                           <div class="off-canvas-toggle hidden d-inline-block ml-15" id="off-canvas-toggle">
-                               <ion-icon name="grid-outline"></ion-icon>
-                           </div>
-                       </div>
+                            <div class="off-canvas-toggle-cover">
+                                <div class="off-canvas-toggle hidden d-inline-block ml-15" id="off-canvas-toggle">
+                                    <ion-icon name="grid-outline"></ion-icon>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
