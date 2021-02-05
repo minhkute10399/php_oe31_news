@@ -22,11 +22,30 @@ interface PostRepositoryInterface
     public function search($search);
 
     /**
-     * Search function is defined for searching title of the accepted post.
+     * This function show all post which is pending.
      *
-     * @param  $search
+     * @param  null
      *
      * @return $post
      */
     public function showRequestPost();
+
+    /**
+     * This function show all post which is approved.
+     *
+     * @param  null
+     *
+     * @return $post
+     */
+    public function showApprovedPost();
+
+    /**
+     * This function show all post which is same category.
+     *
+     * @param  null
+     *
+     * @return $post
+     */
+    public function takePostBaseOnCategory($id);
+
 }

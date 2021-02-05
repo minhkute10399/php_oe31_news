@@ -26,4 +26,12 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         return $this->model->where('parent_id', config('number_format.parent_id'))->get();
     }
 
+    public function filterCategory($id)
+    {
+        return $this->model->findOrFail($id)->load([
+            'posts' => function ($query) {
+                $query->orderBy('created_at', 'desc')->first();
+            }
+        ]);
+    }
 }

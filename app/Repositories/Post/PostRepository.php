@@ -36,4 +36,19 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
             ->latest()
             ->paginate(config('number_status_post.paginate_home'));
     }
+
+    public function showApprovedPost()
+    {
+        return $this->model
+            ->where('status', config('number_status_post.status'))
+            ->latest()
+            ->paginate(config('number_status_post.paginate_home'));
+    }
+
+    public function takePostBaseOnCategory($id)
+    {
+        return $this->model->where('category_id', $id)
+            ->with('category')->latest()
+            ->paginate(config('number_status_post.paginate_home'));
+    }
 }
