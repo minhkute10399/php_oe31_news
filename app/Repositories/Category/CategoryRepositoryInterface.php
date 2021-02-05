@@ -11,4 +11,5 @@ interface CategoryRepositoryInterface extends RepositoryInterface
 
     public function loadParent();
 
+    public function filterCategory($id);
 }
