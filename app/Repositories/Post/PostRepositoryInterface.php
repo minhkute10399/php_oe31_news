@@ -48,4 +48,12 @@ interface PostRepositoryInterface
      */
     public function takePostBaseOnCategory($id);
 
+     /**
+     * This function take post which is approved and soft base on month.
+     *
+     * @param  null
+     *
+     * @return $post
+     */
+    public function takePostBaseOnMonth();
 }

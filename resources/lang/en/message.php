@@ -89,4 +89,5 @@ return [
     'approved' => 'Approved',
     'pending' => 'Pending',
     'spamrequest' => 'Your request is under reviewing!! You can not create anymore',
+    'chart' => 'Chart',
 ];

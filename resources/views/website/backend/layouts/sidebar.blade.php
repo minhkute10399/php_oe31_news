@@ -3,6 +3,12 @@
         <h3>{{ trans('message.admin') }}</h3>
         <ul class="nav side-menu">
             <li>
+                <a href="{{ route('dashboard.index') }}">
+                    <i class="fas fa-tags"></i>{{ trans('message.chart') }}
+                    <span class="fa fa-chevron-down"></span>
+                </a>
+            </li>
+            <li>
                 <a>
                     <i class="fas fa-tags"></i>{{ trans('message.category') }}
                     <span class="fa fa-chevron-down"></span>

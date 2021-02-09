@@ -88,4 +88,5 @@ return [
     'approved' => 'Chấp nhận',
     'pending' => 'Chờ',
     'spamrequest' => 'Yêu cầu của bạn đang được xét duyệt!! Bạn không thể gửi thêm yêu cầu',
+    'chart' => 'Biểu đồ  thống kê',
 ];

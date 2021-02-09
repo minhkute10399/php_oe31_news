@@ -21,6 +21,7 @@ Route::group(['middleware' => ['localization']], function () {
         Route::resource('users', 'UserController');
         Route::resource('comments', 'CommentController');
         Route::get('manageAuthor', 'AuthorController@manageAuthor')->name('manageAuthor');
+        Route::get('chart', 'AdminController@updateChart')->name('chart');
     });
     Route::resource('home', 'ClientController');
     Route::resource('posts', 'PostController');

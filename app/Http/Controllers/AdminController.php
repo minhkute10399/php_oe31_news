@@ -9,6 +9,7 @@ use App\Repositories\Admin\AdminRepository;
 use App\Repositories\Admin\AdminRepositoryInterface;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Post\PostRepositoryInterface;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -26,7 +27,7 @@ class AdminController extends Controller
 
     public function index()
     {
-        return view('website.backend.layouts.main');
+        return view('website.backend.layouts.chart');
     }
 
     public function showRequestPost()
@@ -41,5 +42,15 @@ class AdminController extends Controller
         $post = $this->postRepo->find($id);
 
         return view('website.frontend.preview_post', compact('post'));
+    }
+
+    public function updateChart()
+    {
+        $posts = $this->postRepo->takePostBaseOnMonth();
+        foreach ($posts as $key => $item) {
+            $posts[$key] = $item->count();
+        }
+
+        return response()->json(compact('posts'));
     }
 }
