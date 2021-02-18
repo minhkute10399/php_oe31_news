@@ -3,6 +3,7 @@ namespace App\Repositories\Post;
 
 use App\Repositories\BaseRepository;
 use App\Models\Post;
+use Carbon\Carbon;
 
 class PostRepository extends BaseRepository implements PostRepositoryInterface
 {
@@ -50,5 +51,14 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         return $this->model->where('category_id', $id)
             ->with('category')->latest()
             ->paginate(config('number_status_post.paginate_home'));
+    }
+
+    public function takePostBaseOnMonth()
+    {
+        return $this->model->where('status', config('number_status_post.status'))
+            ->get()
+            ->groupBy(function ($query) {
+                return Carbon::parse($query->updated_at)->format('m');
+        });
     }
 }
