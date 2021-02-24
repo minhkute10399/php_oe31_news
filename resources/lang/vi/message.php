@@ -89,4 +89,12 @@ return [
     'pending' => 'Chờ',
     'spamrequest' => 'Yêu cầu của bạn đang được xét duyệt!! Bạn không thể gửi thêm yêu cầu',
     'chart' => 'Biểu đồ  thống kê',
+    'hello' => 'Hello',
+    'notification' => 'Notification',
+    'statistic' => 'Đến hẹn lại lên, đội ngũ admin xin thống kê cho bạn ',
+    'onMonth' => 'trong tháng trước như sau: ',
+    'totalPending' => 'Tổng số bài viết chưa duyệt của bạn trong tháng trước: ',
+    'totalApproved' => 'Tổng số bài viết được duyệt của bạn trong tháng trước: ',
+    'thanks' => 'Thanks',
+    'newsviral' => 'News Viral',
 ];
