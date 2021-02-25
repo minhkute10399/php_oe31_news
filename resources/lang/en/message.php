@@ -98,4 +98,7 @@ return [
     'totalApproved' => 'Total of your approved post last month: ',
     'thanks' => 'Thanks',
     'newsviral' => 'News Viral',
+    'Notification' => 'Notification',
+    'title_notify' => 'New Comment',
+    'content_notify' => 'You have a comment on your post',
 ];

@@ -177,6 +177,21 @@
                                                 <a href="{{ route('change-languages', ['language' => 'vi']) }}" dusk="vietnam">{{ trans('message.vi') }}</a>
                                             </div>
                                         </li>
+                                        @auth
+                                            <li class="nav-item dropdown dropdown-notifications">
+                                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                                    {{ trans('message.Notification') }}<span class="caret"></span>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right menu-notification" aria-labelledby="navbarDropdown">
+                                                    @foreach (Auth::user()->notifications as $notification)
+                                                        <a class="dropdown-item notification" href="#">
+                                                            <span>{{ $notification->data['title'] }}</span><br>
+                                                            <small>{{ $notification->data['content'] }}</small>
+                                                        </a>
+                                                    @endforeach
+                                                </div>
+                                            </li>
+                                        @endauth
                                     {{-- Notification --}}
                                 </nav>
                             </div>
@@ -737,7 +752,6 @@
     <!-- Vendor JS-->
     @include('sweetalert::alert')
     <script src="{{ asset('assets/js/vendor/modernizr-3.5.0.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/jquery-1.12.4.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/jquery.slicknav.js') }}"></script>
@@ -758,5 +772,7 @@
     <script src="{{ asset('../../../unpkg.com/ionicons%405.0.0/dist/ionicons.js') }}"></script>
     <!-- UltraNews JS -->
     <script src="{{ asset('assets/js/main2.js') }}"></script>
-
+    @jquery
+    @toastr_js
+    @toastr_render
 @endsection

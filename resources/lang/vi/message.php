@@ -97,4 +97,7 @@ return [
     'totalApproved' => 'Tổng số bài viết được duyệt của bạn trong tháng trước: ',
     'thanks' => 'Thanks',
     'newsviral' => 'News Viral',
+    'Notification' => 'Thông báo',
+    'title_notify' => 'Bình luận mới',
+    'content_notify' => 'Bài viết của bạn có bình luận để lại',
 ];

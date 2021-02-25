@@ -35,6 +35,7 @@ Route::group(['middleware' => ['localization']], function () {
     Route::post('/requestAuthor', 'AuthorController@requestAuthor')->name('requestAuthor');
     Route::get('/writer/{id}', 'AuthorController@postAuthor')->name('postAuthor');
     Route::get('/mail', 'AdminController@testMail')->name('mail');
+    Route::get('current-user', 'CommentController@currentUser')->name('currentUser');
 });
 Route::get('change-languages/{language}', 'LangController@changeLanguage')->name('change-languages');
 Auth::routes();

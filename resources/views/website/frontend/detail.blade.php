@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>{{ trans('message.detail_post') }}</title>
@@ -22,21 +22,6 @@
 
 <body>
     <!-- Preloader Start -->
-    <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="text-center">
-                    <img class="jump mb-50" src="{{ asset('assets/imgs/loading.svg') }}" alt="">
-                    <h6>{{ trans('message.now_loading') }}</h6>
-                    <div class="loader">
-                        <div class="bar bar1"></div>
-                        <div class="bar bar2"></div>
-                        <div class="bar bar3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="main-wrap">
         <!--Offcanvas sidebar-->
         <aside id="sidebar-wrapper" class="custom-scrollbar offcanvas-sidebar position-right">
@@ -143,6 +128,21 @@
                                                 <a href="{{ route('change-languages', ['language' => 'vi']) }}">{{ trans('message.vi') }}</a>
                                             </div>
                                         </li>
+                                        @auth
+                                            <li class="nav-item dropdown dropdown-notifications">
+                                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                                    Notification<span class="caret"></span>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right menu-notification" aria-labelledby="navbarDropdown">
+                                                    @foreach (Auth::user()->notifications as $notification)
+                                                        <a class="dropdown-item notification" href="#">
+                                                            <span>{{ $notification->data['title'] }}</span><br>
+                                                            <small>{{ $notification->data['content'] }}</small>
+                                                        </a>
+                                                    @endforeach
+                                                </div>
+                                            </li>
+                                        @endauth
                                     </ul>
                                 </nav>
                             </div>
@@ -271,6 +271,7 @@
                                 <div class="comment-form">
                                     <h4 class="mb-30">{{ trans('message.leave_reply') }}</h4>
                                         <input type="hidden" value="{{ $post->id }}" name="post_id" id="post_id">
+                                        <input type="hidden" value="{{ $post->author->id }}" name="author_id" id="channel_author_id">
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group">
@@ -466,9 +467,10 @@
         </footer>
     </div> <!-- Main Wrap End-->
     <div class="dark-mark"></div>
+
     <!-- Vendor JS-->
     <script src="{{ asset('assets/js/vendor/modernizr-3.5.0.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/jquery-1.12.4.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/vendor/jquery-1.12.4.min.js') }}"></script> --}}
     <script src="{{ asset('assets/js/vendor/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/jquery.slicknav.js') }}"></script>
@@ -489,7 +491,7 @@
     <script src="{{ asset('../../../unpkg.com/ionicons%405.0.0/dist/ionicons.js') }}"></script>
     <!-- UltraNews JS -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
-    <script src="{{ asset('bower-components/components-font-awesome/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('bower_components/components-font-awesome/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('js/like.js') }}"></script>
     <script type="text/javascript">
         var token = '{{ Session::token() }}';
@@ -497,6 +499,11 @@
         var urldisLike = '{{ route('dislike') }}';
     </script>
     <script src="{{ asset('js/comment.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script defer src="{{ asset('js/pusher.js') }}"></script>
+     @jquery
+     @toastr_css
+     @toastr_js
 </body>
 
 
