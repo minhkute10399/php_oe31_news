@@ -90,4 +90,12 @@ return [
     'pending' => 'Pending',
     'spamrequest' => 'Your request is under reviewing!! You can not create anymore',
     'chart' => 'Chart',
+    'hello' => 'Hello',
+    'notification' => 'Notification',
+    'statistic' => 'To reschedule, admin team would like to give ',
+    'onMonth' => 'statistics for last month as follows: ',
+    'totalPending' => 'Total of your pending post last month: ',
+    'totalApproved' => 'Total of your approved post last month: ',
+    'thanks' => 'Thanks',
+    'newsviral' => 'News Viral',
 ];

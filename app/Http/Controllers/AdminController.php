@@ -10,6 +10,11 @@ use App\Repositories\Admin\AdminRepositoryInterface;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Post\PostRepositoryInterface;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CountPost;
+use App\Models\User;
+use PHPUnit\Framework\Constraint\Count;
 
 class AdminController extends Controller
 {

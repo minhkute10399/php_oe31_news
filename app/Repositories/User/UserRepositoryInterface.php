@@ -29,4 +29,13 @@ interface UserRepositoryInterface
      * @return $post
      */
     public function loadMyPost($id);
+
+    /**
+     * Load all post of that author.
+     *
+     * @param  null
+     *
+     * @return $post
+     */
+    public function takeAuthorAndPost($month);
 }

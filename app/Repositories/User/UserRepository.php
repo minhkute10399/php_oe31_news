@@ -27,4 +27,20 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             $query->where('status', config('number_status_post.status_request'));
         }]);
     }
+
+    public function takeAuthorAndPost($month)
+    {
+        return $this->model->where('role_id', config('number_status_post.author'))->withCount([
+            'posts as posts_pending' => function ($query) use ($month) {
+                return $query->whereMonth('created_at', '=', $month)
+                    ->where('status', config('number_status_post.pending'));
+            }
+        ])
+        ->withCount([
+            'posts as posts_approve' => function ($query) use ($month) {
+                return $query->whereMonth('created_at', '=', $month)
+                    ->where('status', config('number_status_post.status'));
+            }
+        ])->get();
+    }
 }
