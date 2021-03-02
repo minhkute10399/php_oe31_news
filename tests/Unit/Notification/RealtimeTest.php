@@ -37,11 +37,11 @@ class RealtimeTest extends TestCase
 
     public function test_via_method()
     {
-        $this->assertEquals(['database'], $this->commentNotification->via(User::class));
+        $this->assertEquals(['database'], $this->commentNotification->via($this->channel));
     }
 
     public function test_toArray_method()
     {
-        $this->assertEquals($this->channel, $this->commentNotification->toArray(User::class));
+        $this->assertEquals($this->channel, $this->commentNotification->toArray($this->channel));
     }
 }

@@ -45,7 +45,6 @@ class MailShowAuthorPost extends Command
     {
         $month = Carbon::now()->month;
         $author = $this->userRepo->takeAuthorAndPost($month);
-
         foreach ($author as $user) {
             $totalPendingPost = $user->posts_pending;
             $totalApprovedPost = $user->posts_approve;
