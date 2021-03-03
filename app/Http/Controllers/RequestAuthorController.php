@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Repositories\RequestWriter\RequestWriterRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use Exception;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RequestAuthorController extends Controller
@@ -63,8 +64,6 @@ class RequestAuthorController extends Controller
      */
     public function destroy($id)
     {
-        $user = $this->requestWriterRepo->find($id);
-
         $this->requestWriterRepo->delete($id);
 
         Alert::success(trans('message.success'), trans('messsage.delete_successfully'));
