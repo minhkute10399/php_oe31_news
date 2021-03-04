@@ -12,6 +12,7 @@ use App\Repositories\Like\LikeRepository;
 use App\Repositories\Like\LikeRepositoryInterface;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Post\PostRepositoryInterface;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -58,7 +59,6 @@ class ClientController extends Controller
         $postId = $request['post_id'];
         $post = $this->postRepo->find($postId);
         if (!$post) {
-
             return null;
         }
         $like = $this->likeRepo->queryLike($postId);
@@ -70,7 +70,7 @@ class ClientController extends Controller
             ]);
         }
         else {
-            $like->delete();
+            $this->likeRepo->delete($like->id);
         }
 
         return response()->json([
