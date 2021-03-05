@@ -37,15 +37,10 @@ class CountPostTest extends TestCase
     }
     public function test_build_mail_send()
     {
-        Mail::fake();
-        Mail::send($this->mail);
-        Mail::assertSent(CountPost::class, function ($mail) {
-            $this->mail->build();
-            $this->assertEquals($mail->viewData['user'], $this->user);
-            $this->assertEquals($mail->viewData['totalPendingPost'], $this->totalPendingPost);
-            $this->assertEquals($mail->viewData['totalApprovedPost'], $this->totalApprovedPost);
-
-            return true;
-        });
+        $result = $this->mail->build();
+        $this->assertInstanceOf(CountPost::class, $result);
+        $this->assertEquals($this->user, $result->viewData['user']);
+        $this->assertEquals($this->totalPendingPost, $result->viewData['totalPendingPost']);
+        $this->assertEquals($this->totalApprovedPost, $result->viewData['totalApprovedPost']);
     }
 }

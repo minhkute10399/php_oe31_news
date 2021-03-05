@@ -40,14 +40,8 @@ class JobMailTest extends TestCase
 
     public function test_job_handle_to_mail()
     {
-        Queue::fake();
         Mail::fake();
-        Queue::push(CountPost::class);
-        Mail::to($this->user)->send(new CountPost($this->user, $this->totalPendingPost, $this->totalApprovedPost));
         $this->job->handle();
-        Mail::assertSent(CountPost::class, function ($mail) {
-            return $mail->hasTo($this->user, $this->totalPendingPost, $this->totalApprovedPost);
-        });
-        Queue::assertPushed(CountPost::class, 1);
+        Mail::assertSent(CountPost::class, 1);
     }
 }
