@@ -42,13 +42,6 @@ class AdminController extends Controller
         return view('website.backend.post.pending_request', compact('posts'));
     }
 
-    public function previewPost($id)
-    {
-        $post = $this->postRepo->find($id);
-
-        return view('website.frontend.preview_post', compact('post'));
-    }
-
     public function updateChart()
     {
         $posts = $this->postRepo->takePostBaseOnMonth();
