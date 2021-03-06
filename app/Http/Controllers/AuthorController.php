@@ -62,8 +62,7 @@ class AuthorController extends Controller
         if(!Gate::allows('create_post')) {
             abort(Response::HTTP_FORBIDDEN);
         }
-        $category = $this->categoryRepo->getAll();
-        $category->load('children');
+        $category = $this->categoryRepo->loadParent();
 
         return view('website.frontend.create', compact('category'));
     }
@@ -115,14 +114,14 @@ class AuthorController extends Controller
             abort(Response::HTTP_FORBIDDEN);
         }
 
-        if (is_null(Auth::user()->load('requestwriter')->requestwriter)) {
+        if ((Auth::user()->load('requestwriter')->requestwriter)) {
+            toast(trans('message.spamrequest'),'warning')->timerProgressBar();
+        } else {
             $this->requestWriterRepo->create([
                 'note' => $request->note,
                 'user_id' => Auth::id(),
             ]);
             toast(trans('message.successfully'),'success')->timerProgressBar();
-        } else {
-            toast(trans('message.spamrequest'),'warning')->timerProgressBar();
         }
 
         return redirect()->back();
@@ -136,8 +135,7 @@ class AuthorController extends Controller
     public function edit($id)
     {
         $authors = $this->postRepo->find($id);
-        $category = $this->categoryRepo->getAll();
-        $category->load('children');
+        $category = $this->categoryRepo->loadParent();
 
         return view('website.frontend.edit', compact('authors', 'category'));
     }
